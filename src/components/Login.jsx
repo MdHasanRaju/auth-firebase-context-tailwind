@@ -3,8 +3,7 @@ import { Link } from "react-router-dom";
 import { AuthContext } from "../providers/AuthProviders";
 
 const login = () => { 
-  const {signIn} = useContext(AuthContext);
-  console.log(signIn)
+  const {signIn, signInWithGoogle} = useContext(AuthContext); 
 
   const handleLogin = (event) => {
     event.preventDefault();
@@ -17,6 +16,7 @@ const login = () => {
     signIn(email, password)
     .then((result) => { 
       const loggedUser = result.user; 
+      form.reset();
       console.log(loggedUser)
     })
     .catch((error) => { 
@@ -24,6 +24,17 @@ const login = () => {
       console.log(errorMessage)
     });
   };
+
+  const handleGoogleLogin = () => {
+    signInWithGoogle()
+    .then(result => {
+      const loggedUser = result.user;
+      console.log(loggedUser)
+    })
+    .catch(error => {
+      console.log(error)
+    })
+  }
   
   return (
     <div className="hero min-h-screen bg-base-200">
@@ -65,6 +76,9 @@ const login = () => {
             <div className="form-control mt-6">
               <button className="btn btn-primary">Login</button>
             </div>
+            <label className="label">
+                <button onClick={handleGoogleLogin} className="btn btn-primary"> Sign with google</button> 
+              </label>
             <label className="label">
                <Link to='/register'><button className="btn btn-active btn-link"> new to auth Vaiya? please register</button></Link>
               </label>

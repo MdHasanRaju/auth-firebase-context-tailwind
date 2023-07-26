@@ -9,6 +9,9 @@ import Home from "./components/Home.jsx";
 import NotFound from "./components/NotFound"; 
 import AuthProviders from "./providers/AuthProviders.jsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import Orders from "./components/Orders.jsx";
+import PrivateRoute from './routes/PrivateRoute';
+import Profile from "./components/Profile.jsx";
 
 
 const router = createBrowserRouter([
@@ -28,6 +31,14 @@ const router = createBrowserRouter([
       {
         path: "/register",
         element: <Register></Register>,
+      },
+      {
+        path: "/profile",
+        element: <PrivateRoute><Profile></Profile></PrivateRoute>,
+      },
+      {
+        path: "/orders",
+        element: <PrivateRoute><Orders></Orders></PrivateRoute>,
       },
     ],
   },

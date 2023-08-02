@@ -1,14 +1,12 @@
-import React, { useContext } from "react";
+import  { useContext } from "react";
+import { updateProfile } from "firebase/auth";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../providers/AuthProviders";
-import { Result } from "postcss";
 
 const Register = () => {
-  const {createUser} = useContext(AuthContext);
-  
-
+  const {createUser,setUpdatedUser} = useContext(AuthContext); 
   const handleRegister = (event) => {
-    event.preventDefault(); 
+    event.preventDefault();  
     const form = event.target;
     const name = form.name.value;
     const email = form.email.value;
@@ -16,15 +14,24 @@ const Register = () => {
 
     createUser(email, password)
     .then(result => {
-      const loggedUser = result.user;
-      form.reset();
-      console.log(loggedUser)
+      const loggedUser = result.user; 
+      updateUserData(loggedUser, name)
+      form.reset(); 
     })
     .catch(error => {
       console.log(error)
-    })
-
+    }) 
   };
+
+  const updateUserData = (user, name) => {
+    updateProfile(user, {
+      displayName:name,
+    }).then((res) => { 
+      setUpdatedUser(res) 
+    }).catch((error => {
+      console.log(error)
+    }))
+  }
   return (
     <div className="hero min-h-screen bg-base-200">
       <div className="hero-content flex-col ">

@@ -1,10 +1,9 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../providers/AuthProviders";
 
 const Header = () => {
-  const { user, logOut } = useContext(AuthContext);
-  console.log(logOut)
+  const { user, logOut } = useContext(AuthContext); 
 
   const handleLogout = () => {
     logOut()
@@ -15,10 +14,10 @@ const Header = () => {
   return (
     <>
       <div className="navbar bg-neutral text-neutral-content">
-        <a className="btn btn-ghost normal-case text-xl">Auth Vaiya</a>
         <Link className="btn btn-ghost normal-case text-xl" to="/">
-          Home
+          Auth Vaiya
         </Link>
+         
         <Link className="btn btn-ghost normal-case text-xl" to="/orders">
           Orders
         </Link>
@@ -31,9 +30,10 @@ const Header = () => {
         <Link className="btn btn-ghost normal-case text-xl" to="/register">
           Register
         </Link>
-        {user ? (
+        { user ? (
           <div>
-            <span>{user.email}</span>{" "}
+            <span className="text-info mr-2">{user?.displayName}</span>{" "}
+            <span>{user?.email}</span>{" "}
             <button onClick={handleLogout} className="btn btn-xs ml-2">
               sign out
             </button>{" "}

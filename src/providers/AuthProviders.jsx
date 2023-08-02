@@ -1,6 +1,6 @@
-import React, { createContext, useEffect, useState } from "react";
+import  { createContext, useEffect, useState } from "react";
 import {
-    GoogleAuthProvider,
+  GoogleAuthProvider,
   createUserWithEmailAndPassword,
   getAuth,
   onAuthStateChanged,
@@ -16,9 +16,11 @@ const googleAuthProvider = new GoogleAuthProvider();
 
 const AuthProviders = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [updatedUser, setUpdatedUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
   const createUser = (email, password) => {
+    setLoading(true);
     return createUserWithEmailAndPassword(auth, email, password);
   };
 
@@ -27,8 +29,9 @@ const AuthProviders = ({ children }) => {
   };
 
   const signInWithGoogle = () => {
-    return signInWithPopup(auth, googleAuthProvider)
-  }
+    setLoading(true);
+    return signInWithPopup(auth, googleAuthProvider);
+  };
 
   const logOut = () => {
     return signOut(auth);
@@ -36,23 +39,29 @@ const AuthProviders = ({ children }) => {
 
   // Observe auth state change
   useEffect(() => {
-   const unSubscribe = onAuthStateChanged(auth, currentUser => {
-    console.log('state changed', currentUser)
-    setUser(currentUser)
-    setLoading(false)
-   })
-   return () => {
-    unSubscribe();
-   }
+    const unSubscribe = onAuthStateChanged(auth, (currentUser) => {
+      if (updatedUser?.displayName) {
+        setUser(updatedUser);
+        setLoading(false)
+      } else { 
+        setUser(currentUser);
+        setLoading(false);
+      }
+    });
+    return () => {
+      unSubscribe();
+    };
   }, []);
 
   const authInfo = {
     user,
     loading,
+    setLoading,
     createUser,
     signIn,
     signInWithGoogle,
     logOut,
+    setUpdatedUser,
   };
 
   return (

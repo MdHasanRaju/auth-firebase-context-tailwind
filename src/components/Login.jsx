@@ -1,9 +1,13 @@
-import React, { useContext } from "react";
-import { Link } from "react-router-dom";
+import  { useContext } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../providers/AuthProviders";
 
 const login = () => { 
   const {signIn, signInWithGoogle} = useContext(AuthContext); 
+  
+  const location = useLocation();
+  const navigate = useNavigate();
+  const from = location.state?.from?.pathname || '/login'
 
   const handleLogin = (event) => {
     event.preventDefault();
@@ -17,6 +21,7 @@ const login = () => {
     .then((result) => { 
       const loggedUser = result.user; 
       form.reset();
+      navigate(from, { replace: true });
       console.log(loggedUser)
     })
     .catch((error) => { 
@@ -29,6 +34,7 @@ const login = () => {
     signInWithGoogle()
     .then(result => {
       const loggedUser = result.user;
+      navigate(from, { replace: true });
       console.log(loggedUser)
     })
     .catch(error => {
@@ -77,7 +83,7 @@ const login = () => {
               <button className="btn btn-primary">Login</button>
             </div>
             <label className="label">
-                <button onClick={handleGoogleLogin} className="btn btn-primary"> Sign with google</button> 
+                <button onClick={handleGoogleLogin} className="btn btn-primary w-[100%]"> Sign with google</button> 
               </label>
             <label className="label">
                <Link to='/register'><button className="btn btn-active btn-link"> new to auth Vaiya? please register</button></Link>
